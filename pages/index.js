@@ -1,4 +1,5 @@
 
+
 // import React, { useState, useEffect, useRef } from 'react';
 // import { Upload, Shield, AlertTriangle, CheckCircle, Activity, TrendingUp, BarChart3, PieChart, RefreshCw, FileText, Download, Zap, Lock, Unlock, Target, Percent } from 'lucide-react';
 // import { PDFDocument, rgb } from 'pdf-lib';
@@ -77,6 +78,13 @@
 //         randomForest: (0.93 + Math.random() * 0.05).toFixed(3),
 //         logisticRegression: (0.88 + Math.random() * 0.06).toFixed(3),
 //         neuralNetwork: (0.91 + Math.random() * 0.05).toFixed(3)
+//       },
+//       // Fraud detection count by each model
+//       fraudDetectionByModel: {
+//         xgboost: Math.floor(fraudCount * (0.85 + Math.random() * 0.12)),
+//         randomForest: Math.floor(fraudCount * (0.80 + Math.random() * 0.15)),
+//         logisticRegression: Math.floor(fraudCount * (0.75 + Math.random() * 0.18)),
+//         neuralNetwork: Math.floor(fraudCount * (0.82 + Math.random() * 0.14))
 //       },
 //       modelMetrics: {
 //         xgboost: {
@@ -204,17 +212,9 @@
 //         size: fontSize, 
 //         color: rgb(0.2, 0.6, 0.3) 
 //       });
-//       y -= 20;
-
-//       page.drawText(`Fraud Rate: ${((results.fraudCount / results.totalRecords) * 100).toFixed(2)}%`, { 
-//         x: 70, 
-//         y, 
-//         size: fontSize, 
-//         color: rgb(0, 0, 0) 
-//       });
 //       y -= 40;
 
-//       page.drawText('MODELS FRAUD DETECTION STATUS', { 
+//       page.drawText('FRAUD DETECTION BY MODEL', { 
 //         x: 50, 
 //         y, 
 //         size: headingSize, 
@@ -222,16 +222,13 @@
 //       });
 //       y -= 25;
 
-//       Object.entries(results.modelsDetected).forEach(([model, detected]) => {
+//       Object.entries(results.fraudDetectionByModel).forEach(([model, count]) => {
 //         const modelName = model.replace(/([A-Z])/g, ' $1').trim();
-//         const status = detected ? 'FRAUD DETECTED' : 'CLEAR';
-//         const color = detected ? rgb(0.7, 0.2, 0.2) : rgb(0.2, 0.6, 0.3);
-        
-//         page.drawText(`${modelName}: ${status}`, { 
+//         page.drawText(`${modelName}: ${count} frauds detected`, { 
 //           x: 70, 
 //           y, 
 //           size: fontSize, 
-//           color 
+//           color: rgb(0.7, 0.2, 0.2)
 //         });
 //         y -= 20;
 //       });
@@ -323,38 +320,6 @@
 //         <div className="mt-3 text-center">
 //           <span className="text-sm text-gray-400">AUC: </span>
 //           <span className="text-lg font-bold text-blue-400">{aucScore}</span>
-//         </div>
-//       </div>
-//     );
-//   };
-
-//   // Confusion Matrix Component
-//   const ConfusionMatrix = ({ metrics, modelName }) => {
-//     const { truePositives, falsePositives, trueNegatives, falseNegatives } = metrics;
-
-//     return (
-//       <div className="bg-gray-900/50 rounded-2xl p-6 border border-gray-700">
-//         <h5 className="font-bold mb-4 text-center text-gray-200">{modelName} - Confusion Matrix</h5>
-//         <div className="grid grid-cols-2 gap-2 mb-4">
-//           <div className="bg-emerald-500/15 border border-emerald-500/40 rounded-lg p-4 text-center">
-//             <div className="text-2xl font-black text-emerald-400">{truePositives}</div>
-//             <div className="text-xs text-gray-400 mt-1">True Positives</div>
-//           </div>
-//           <div className="bg-rose-500/15 border border-rose-500/40 rounded-lg p-4 text-center">
-//             <div className="text-2xl font-black text-rose-400">{falsePositives}</div>
-//             <div className="text-xs text-gray-400 mt-1">False Positives</div>
-//           </div>
-//           <div className="bg-rose-500/15 border border-rose-500/40 rounded-lg p-4 text-center">
-//             <div className="text-2xl font-black text-rose-400">{falseNegatives}</div>
-//             <div className="text-xs text-gray-400 mt-1">False Negatives</div>
-//           </div>
-//           <div className="bg-emerald-500/15 border border-emerald-500/40 rounded-lg p-4 text-center">
-//             <div className="text-2xl font-black text-emerald-400">{trueNegatives}</div>
-//             <div className="text-xs text-gray-400 mt-1">True Negatives</div>
-//           </div>
-//         </div>
-//         <div className="text-center text-sm text-gray-400">
-//           Accuracy: <span className="text-blue-400 font-bold">{metrics.accuracy}</span>
 //         </div>
 //       </div>
 //     );
@@ -630,6 +595,40 @@
 //                   </div>
 //                 </div>
 
+//                 {/* NEW: Fraud Detection Count by Each Model */}
+//                 <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
+//                   <h3 className="text-2xl font-bold mb-6 flex items-center">
+//                     <AlertTriangle className="w-8 h-8 mr-3 text-rose-400" />
+//                     Fraud Detection Count by Model
+//                   </h3>
+//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+//                     {Object.entries(results.fraudDetectionByModel).map(([model, count]) => {
+//                       const percentage = ((count / results.fraudCount) * 100).toFixed(1);
+//                       return (
+//                         <div key={model} className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700 hover:border-rose-500/50 transition-all duration-300">
+//                           <div className="flex items-center justify-between mb-4">
+//                             <h4 className="font-bold text-lg capitalize text-gray-200">
+//                               {model.replace(/([A-Z])/g, ' $1').trim()}
+//                             </h4>
+//                             <AlertTriangle className="w-6 h-6 text-rose-400" />
+//                           </div>
+//                           <div className="text-5xl font-black text-rose-400 mb-2">{count}</div>
+//                           <div className="text-sm text-gray-400 mb-4">Frauds Detected</div>
+//                           <div className="relative w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+//                             <div 
+//                               className="h-full bg-gradient-to-r from-rose-500 to-rose-600 rounded-full transition-all duration-1000"
+//                               style={{ width: `${percentage}%` }}
+//                             ></div>
+//                           </div>
+//                           <div className="text-xs text-right text-gray-500 mt-2">
+//                             {percentage}% Detection Rate
+//                           </div>
+//                         </div>
+//                       );
+//                     })}
+//                   </div>
+//                 </div>
+
 //                 {/* Model Performance Metrics */}
 //                 <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
 //                   <h3 className="text-2xl font-bold mb-6 flex items-center">
@@ -677,23 +676,6 @@
 //                         key={model} 
 //                         modelName={model.replace(/([A-Z])/g, ' $1').trim()} 
 //                         aucScore={score} 
-//                       />
-//                     ))}
-//                   </div>
-//                 </div>
-
-//                 {/* Confusion Matrices */}
-//                 <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
-//                   <h3 className="text-2xl font-bold mb-6 flex items-center">
-//                     <BarChart3 className="w-8 h-8 mr-3 text-blue-400" />
-//                     Confusion Matrices
-//                   </h3>
-//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                     {Object.entries(results.modelMetrics).map(([model, metrics]) => (
-//                       <ConfusionMatrix 
-//                         key={model} 
-//                         metrics={metrics} 
-//                         modelName={model.replace(/([A-Z])/g, ' $1').trim()} 
 //                       />
 //                     ))}
 //                   </div>
@@ -963,6 +945,7 @@
 //     </div>
 //   );
 // }
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, Shield, AlertTriangle, CheckCircle, Activity, TrendingUp, BarChart3, PieChart, RefreshCw, FileText, Download, Zap, Lock, Unlock, Target, Percent } from 'lucide-react';
 import { PDFDocument, rgb } from 'pdf-lib';
@@ -1025,15 +1008,26 @@ export default function FraudDetectionApp() {
     const totalRecords = Math.floor(Math.random() * 1000) + 500;
     const fraudCount = Math.floor(Math.random() * 50) + 10;
     
+    const modelsDetected = {
+      xgboost: Math.random() > 0.3,
+      randomForest: Math.random() > 0.2,
+      logisticRegression: Math.random() > 0.4,
+      neuralNetwork: Math.random() > 0.35
+    };
+    
+    // FIXED: Only assign fraud counts to models that detected fraud
+    const fraudDetectionByModel = {};
+    Object.keys(modelsDetected).forEach(model => {
+      if (modelsDetected[model]) {
+        // Only models that detected fraud get a count
+        fraudDetectionByModel[model] = Math.floor(fraudCount * (0.75 + Math.random() * 0.20));
+      }
+    });
+    
     const mockResults = {
       fileName: file.name,
       totalRecords: totalRecords,
-      modelsDetected: {
-        xgboost: Math.random() > 0.3,
-        randomForest: Math.random() > 0.2,
-        logisticRegression: Math.random() > 0.4,
-        neuralNetwork: Math.random() > 0.35
-      },
+      modelsDetected: modelsDetected,
       fraudCount: fraudCount,
       legitimateCount: totalRecords - fraudCount,
       rocAucScores: {
@@ -1042,13 +1036,7 @@ export default function FraudDetectionApp() {
         logisticRegression: (0.88 + Math.random() * 0.06).toFixed(3),
         neuralNetwork: (0.91 + Math.random() * 0.05).toFixed(3)
       },
-      // Fraud detection count by each model
-      fraudDetectionByModel: {
-        xgboost: Math.floor(fraudCount * (0.85 + Math.random() * 0.12)),
-        randomForest: Math.floor(fraudCount * (0.80 + Math.random() * 0.15)),
-        logisticRegression: Math.floor(fraudCount * (0.75 + Math.random() * 0.18)),
-        neuralNetwork: Math.floor(fraudCount * (0.82 + Math.random() * 0.14))
-      },
+      fraudDetectionByModel: fraudDetectionByModel, // FIXED: Only contains models that detected fraud
       modelMetrics: {
         xgboost: {
           precision: (0.92 + Math.random() * 0.06).toFixed(3),
@@ -1177,26 +1165,28 @@ export default function FraudDetectionApp() {
       });
       y -= 40;
 
-      page.drawText('FRAUD DETECTION BY MODEL', { 
-        x: 50, 
-        y, 
-        size: headingSize, 
-        color: rgb(0.3, 0.3, 0.3) 
-      });
-      y -= 25;
-
-      Object.entries(results.fraudDetectionByModel).forEach(([model, count]) => {
-        const modelName = model.replace(/([A-Z])/g, ' $1').trim();
-        page.drawText(`${modelName}: ${count} frauds detected`, { 
-          x: 70, 
+      if (Object.keys(results.fraudDetectionByModel).length > 0) {
+        page.drawText('FRAUD DETECTION BY MODEL', { 
+          x: 50, 
           y, 
-          size: fontSize, 
-          color: rgb(0.7, 0.2, 0.2)
+          size: headingSize, 
+          color: rgb(0.3, 0.3, 0.3) 
         });
-        y -= 20;
-      });
+        y -= 25;
 
-      y -= 20;
+        Object.entries(results.fraudDetectionByModel).forEach(([model, count]) => {
+          const modelName = model.replace(/([A-Z])/g, ' $1').trim();
+          page.drawText(`${modelName}: ${count} frauds detected`, { 
+            x: 70, 
+            y, 
+            size: fontSize, 
+            color: rgb(0.7, 0.2, 0.2)
+          });
+          y -= 20;
+        });
+
+        y -= 20;
+      }
 
       page.drawText('MODEL PERFORMANCE (ROC-AUC SCORES)', { 
         x: 50, 
@@ -1558,39 +1548,41 @@ export default function FraudDetectionApp() {
                   </div>
                 </div>
 
-                {/* NEW: Fraud Detection Count by Each Model */}
-                <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
-                  <h3 className="text-2xl font-bold mb-6 flex items-center">
-                    <AlertTriangle className="w-8 h-8 mr-3 text-rose-400" />
-                    Fraud Detection Count by Model
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {Object.entries(results.fraudDetectionByModel).map(([model, count]) => {
-                      const percentage = ((count / results.fraudCount) * 100).toFixed(1);
-                      return (
-                        <div key={model} className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700 hover:border-rose-500/50 transition-all duration-300">
-                          <div className="flex items-center justify-between mb-4">
-                            <h4 className="font-bold text-lg capitalize text-gray-200">
-                              {model.replace(/([A-Z])/g, ' $1').trim()}
-                            </h4>
-                            <AlertTriangle className="w-6 h-6 text-rose-400" />
+                {/* FIXED: Fraud Detection Count by Each Model - Only shows models that detected fraud */}
+                {Object.keys(results.fraudDetectionByModel).length > 0 && (
+                  <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
+                    <h3 className="text-2xl font-bold mb-6 flex items-center">
+                      <AlertTriangle className="w-8 h-8 mr-3 text-rose-400" />
+                      Fraud Detection Count by Model
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {Object.entries(results.fraudDetectionByModel).map(([model, count]) => {
+                        const percentage = ((count / results.fraudCount) * 100).toFixed(1);
+                        return (
+                          <div key={model} className="bg-gray-800/40 rounded-2xl p-6 border border-gray-700 hover:border-rose-500/50 transition-all duration-300">
+                            <div className="flex items-center justify-between mb-4">
+                              <h4 className="font-bold text-lg capitalize text-gray-200">
+                                {model.replace(/([A-Z])/g, ' $1').trim()}
+                              </h4>
+                              <AlertTriangle className="w-6 h-6 text-rose-400" />
+                            </div>
+                            <div className="text-5xl font-black text-rose-400 mb-2">{count}</div>
+                            <div className="text-sm text-gray-400 mb-4">Frauds Detected</div>
+                            <div className="relative w-full bg-gray-800 rounded-full h-3 overflow-hidden">
+                              <div 
+                                className="h-full bg-gradient-to-r from-rose-500 to-rose-600 rounded-full transition-all duration-1000"
+                                style={{ width: `${percentage}%` }}
+                              ></div>
+                            </div>
+                            <div className="text-xs text-right text-gray-500 mt-2">
+                              {percentage}% Detection Rate
+                            </div>
                           </div>
-                          <div className="text-5xl font-black text-rose-400 mb-2">{count}</div>
-                          <div className="text-sm text-gray-400 mb-4">Frauds Detected</div>
-                          <div className="relative w-full bg-gray-800 rounded-full h-3 overflow-hidden">
-                            <div 
-                              className="h-full bg-gradient-to-r from-rose-500 to-rose-600 rounded-full transition-all duration-1000"
-                              style={{ width: `${percentage}%` }}
-                            ></div>
-                          </div>
-                          <div className="text-xs text-right text-gray-500 mt-2">
-                            {percentage}% Detection Rate
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Model Performance Metrics */}
                 <div className="bg-gray-900/50 rounded-3xl p-8 border border-gray-800 backdrop-blur-xl shadow-2xl">
