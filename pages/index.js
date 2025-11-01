@@ -697,7 +697,7 @@ export default function FraudDetectionApp() {
       let y = 780;
 
       // Title
-      page.drawText('FRAUD SENTINEL', { 
+      page.drawText('CREDIT CARD FRAUD DETECTION', { 
         x: 50, 
         y, 
         size: titleSize, 
@@ -840,7 +840,7 @@ export default function FraudDetectionApp() {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = `Fraud_Sentinel_Report_${results.fileName.replace(/\.[^/.]+$/, '')}_${Date.now()}.pdf`;
+      link.download = `FRAUD_DETECTION_REPORT_${results.fileName.replace(/\.[^/.]+$/, '')}_${Date.now()}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -876,7 +876,7 @@ export default function FraudDetectionApp() {
               </div>
               <div>
                 <h1 className="text-3xl font-black bg-gradient-to-r from-red-400 to-purple-400 bg-clip-text text-transparent">
-                  FRAUD SENTINEL
+                  CREDIT CARD FRAUD DETECTION
                 </h1>
                 <p className="text-sm text-gray-400">AI-Powered Detection System by THE NEURONOVA TEAM</p>
               </div>
