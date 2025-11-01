@@ -116,7 +116,7 @@ export default function FraudDetectionApp() {
                 <h1 className="text-3xl font-black bg-gradient-to-r from-red-400 to-purple-400 bg-clip-text text-transparent">
                   FRAUD SENTINEL
                 </h1>
-                <p className="text-sm text-gray-400">AI-Powered Detection System By NeuroNova Team</p>
+                <p className="text-sm text-gray-400">AI-Powered Detection System by Rishav Raj</p>
               </div>
             </div>
             <div className="flex items-center space-x-6">
@@ -589,4 +589,3 @@ export default function FraudDetectionApp() {
     </div>
   );
 }
-
